@@ -1,4 +1,4 @@
-import 'package:dice_roller/src/pages/dice_page.dart';
+import 'src/pages/dice_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,4 +19,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

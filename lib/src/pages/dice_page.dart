@@ -1,59 +1,78 @@
-import 'package:dice_roller/classes/dice.dart';
+import '../../const/constants.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/rendering.dart';
 
-class DicePage extends StatelessWidget{
+class DicePage extends StatelessWidget {
   final diceQuantity = 6;
+  final String path = "lib/assets/face";
+  final String ext = ".png";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Dice page"),
+        title: Text(
+          "Dice page",
+        ),
       ),
       body: GridView.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 0.0,
-        crossAxisSpacing: 20.0,
-        children: getDices(diceQuantity),
+        padding: EdgeInsets.only(
+          top: Constants.gridViewPaddingTop,
+        ),
+        childAspectRatio: Constants.aspectRatio,
+        crossAxisCount: Constants.gridViewCrossAxisCount,
+        crossAxisSpacing: Constants.gridViewPaddingTop,
+        children: List.generate(diceQuantity, (index) {
+          return Container(
+            padding: EdgeInsets.only(
+              left: Constants.containerPadding,
+              right: Constants.containerPadding,
+            ),
+            child: Image.asset(
+              path + (++index).toString() + ext,
+            ),
+          );
+        }),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(width: 2.0, color: Colors.blue)
-          )
-        ),
+            border: Border(
+                top: BorderSide(
+          width: Constants.borderSideWidth,
+          color: Colors.blue,
+        ))),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              height: 55.0,
-              padding: EdgeInsets.only(right: 5.0, top: 10.0),
+              height: Constants.containerHeight,
+              padding: EdgeInsets.only(
+                right: Constants.containerPaddingRight,
+                top: Constants.containerPadding,
+              ),
               child: Text(
                 "Press any dice to roll them!",
-                style: TextStyle(fontSize: 30.0),
+                style: TextStyle(
+                  fontSize: Constants.indicatorTextFontSize,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
-            Text(
-              "Score: 21",
-              style: TextStyle(fontSize: 30.0),
+            Container(
+              padding: EdgeInsets.only(
+                bottom: Constants.containerPadding,
+              ),
+              child: Text(
+                "Score: 21",
+                style: TextStyle(
+                  fontSize: Constants.scoreTextFontSize,
+                ),
+              ),
             )
           ],
         ),
       ),
     );
   }
-
-  getDices(int diceQuantity) {
-    List<Widget> dices = [];
-    for(var i = 1; i<=diceQuantity; i++){
-      dices.add(
-        Dice.getFace(i)
-      );
-    }
-    return dices;
-  }
-
 }
