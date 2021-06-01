@@ -37,11 +37,13 @@ class DicePage extends StatelessWidget {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(
-          width: Constants.borderSideWidth,
-          color: Colors.blue,
-        ))),
+          border: Border(
+            top: BorderSide(
+              width: Constants.borderSideWidth,
+              color: Colors.blue,
+            ),
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
