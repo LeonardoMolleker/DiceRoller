@@ -9,7 +9,7 @@ class Dice{
       padding: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Image.asset(
         _path + diceValue.toString() + _ext,
-        scale: 1.0,
+        scale: 0.8,
       ),
     );
   }
