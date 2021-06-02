@@ -4,9 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class DicePage extends StatelessWidget {
-  final diceQuantity = 6;
-  final String path = "lib/assets/face";
-  final String ext = ".png";
+  String ext;
+  String path;
+  int diceQuantity;
+  int crossAxisCount;
+
+  DicePage({
+    this.diceQuantity,
+    this.path = "lib/assets/face",
+    this.ext = ".png",
+    this.crossAxisCount = 2,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +29,16 @@ class DicePage extends StatelessWidget {
           top: Constants.gridViewPaddingTop,
         ),
         childAspectRatio: Constants.aspectRatio,
-        crossAxisCount: Constants.gridViewCrossAxisCount,
+        crossAxisCount: this.crossAxisCount,
         crossAxisSpacing: Constants.gridViewPaddingTop,
-        children: List.generate(diceQuantity, (index) {
+        children: List.generate(this.diceQuantity, (index) {
           return Container(
             padding: EdgeInsets.only(
               left: Constants.containerPadding,
               right: Constants.containerPadding,
             ),
             child: Image.asset(
-              path + (++index).toString() + ext,
+              this.path + (++index).toString() + this.ext,
             ),
           );
         }),
