@@ -90,7 +90,12 @@ class DicePage extends StatelessWidget {
 
   List<Widget> buildList(AsyncSnapshot snapshot) {
     return snapshot.data.map<Widget>((value) {
-      return Dice(bloc, path, ext, value);
+      return Dice(
+        bloc,
+        path,
+        ext,
+        value,
+      );
     }).toList();
   }
 }

@@ -9,7 +9,9 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final IDiceBloc bloc = DiceBloc(numberOfDices: 6);
+  final IDiceBloc bloc = DiceBloc(
+    numberOfDices: 6,
+  );
 
   @override
   Widget build(BuildContext context) {
