@@ -1,19 +1,22 @@
+import '../../bloc/i_dice_bloc.dart';
+import '../../widgets/dice.dart';
 import '../../const/constants.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class DicePage extends StatelessWidget {
-  String ext;
-  String path;
-  int diceQuantity;
-  int crossAxisCount;
+  final String ext;
+  final String path;
+  final int crossAxisCount;
+  final IDiceBloc bloc;
 
   DicePage({
-    this.diceQuantity,
-    this.path = "lib/assets/face",
-    this.ext = ".png",
-    this.crossAxisCount = 2,
+    this.path = Constants.defaultPath,
+    this.ext = Constants.defaultExt,
+    this.crossAxisCount = Constants.defaultCrossAxisCount,
+    this.bloc,
   });
 
   @override
@@ -21,27 +24,22 @@ class DicePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Dice page",
+          Constants.dicePageTitle,
         ),
       ),
-      body: GridView.count(
-        padding: EdgeInsets.only(
-          top: Constants.gridViewPaddingTop,
-        ),
-        childAspectRatio: Constants.aspectRatio,
-        crossAxisCount: this.crossAxisCount,
-        crossAxisSpacing: Constants.gridViewPaddingTop,
-        children: List.generate(this.diceQuantity, (index) {
-          return Container(
-            padding: EdgeInsets.only(
-              left: Constants.containerPadding,
-              right: Constants.containerPadding,
-            ),
-            child: Image.asset(
-              this.path + (++index).toString() + this.ext,
+      body: StreamBuilder(
+        initialData: defaultDices(),
+        stream: bloc.stream,
+        builder: (context, snapshot) {
+          return GridView.count(
+            childAspectRatio: Constants.aspectRatio,
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: Constants.gridViewPaddingTop,
+            children: buildList(
+              snapshot,
             ),
           );
-        }),
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -55,28 +53,32 @@ class DicePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: Constants.containerHeight,
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 right: Constants.containerPaddingRight,
                 top: Constants.containerPadding,
               ),
-              child: Text(
-                "Press any dice to roll them!",
-                style: TextStyle(
-                  fontSize: Constants.indicatorTextFontSize,
+              child: Container(
+                height: Constants.containerHeight,
+                child: Text(
+                  Constants.rollThemText,
+                  style: TextStyle(
+                    fontSize: Constants.indicatorTextFontSize,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 bottom: Constants.containerPadding,
               ),
-              child: Text(
-                "Score: 21",
-                style: TextStyle(
-                  fontSize: Constants.scoreTextFontSize,
+              child: Container(
+                child: Text(
+                  "Score: 21",
+                  style: TextStyle(
+                    fontSize: Constants.scoreTextFontSize,
+                  ),
                 ),
               ),
             )
@@ -84,5 +86,21 @@ class DicePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> buildList(AsyncSnapshot snapshot) {
+    return snapshot.data.map<Widget>((value) {
+      return Dice(bloc, path, ext, value);
+    }).toList();
+  }
+
+  List<int> defaultDices() {
+    List<int> defaultDices = List.generate(
+      bloc.numberOfDices,
+      (index) {
+        return Constants.defaultDiceValue;
+      },
+    );
+    return defaultDices;
   }
 }
