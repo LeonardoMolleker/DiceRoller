@@ -19,7 +19,7 @@ class Dice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: rollDices,
+      onTap: diceBloc.rollDices,
       child: Padding(
         padding: const EdgeInsets.only(
           left: Constants.containerPadding,
@@ -32,9 +32,5 @@ class Dice extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void rollDices() {
-    diceBloc.rollDices();
   }
 }

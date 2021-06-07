@@ -28,7 +28,7 @@ class DicePage extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        initialData: defaultDices(),
+        initialData: bloc.defaultDices(),
         stream: bloc.stream,
         builder: (context, snapshot) {
           return GridView.count(
@@ -92,15 +92,5 @@ class DicePage extends StatelessWidget {
     return snapshot.data.map<Widget>((value) {
       return Dice(bloc, path, ext, value);
     }).toList();
-  }
-
-  List<int> defaultDices() {
-    List<int> defaultDices = List.generate(
-      bloc.numberOfDices,
-      (index) {
-        return Constants.defaultDiceValue;
-      },
-    );
-    return defaultDices;
   }
 }

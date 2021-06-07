@@ -17,6 +17,16 @@ class DiceBloc extends IDiceBloc {
   @override
   Future<void> initialize() {}
 
+  List<int> defaultDices() {
+    List<int> defaultDices = List.generate(
+      numberOfDices,
+          (index) {
+        return Constants.defaultDiceValue;
+      },
+    );
+    return defaultDices;
+  }
+
   @override
   void dispose() {
     _streamController.close();

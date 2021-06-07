@@ -6,4 +6,6 @@ abstract class IDiceBloc extends Bloc {
   Stream<List<int>> get stream;
 
   rollDices();
+
+  List<int> defaultDices();
 }
