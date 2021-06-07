@@ -1,7 +1,7 @@
-import 'package:dice_roller/bloc/i_dice_bloc.dart';
-
+import 'bloc/i_dice_bloc.dart';
 import 'bloc/dice_bloc.dart';
 import 'src/pages/dice_page.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,9 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final IDiceBloc bloc = DiceBloc(diceNumbers: 6);
-
-  MyApp(){}
+  final IDiceBloc bloc = DiceBloc(numberOfDices: 6);
 
   @override
   Widget build(BuildContext context) {
