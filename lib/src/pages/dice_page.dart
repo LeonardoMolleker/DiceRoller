@@ -1,4 +1,4 @@
-import '../../bloc/i_dice_bloc.dart';
+import '../../bloc/dice_bloc.dart';
 import '../../widgets/dice.dart';
 import '../../const/constants.dart';
 
@@ -6,18 +6,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class DicePage extends StatelessWidget {
-  final String ext;
-  final String path;
+class DicePage extends StatefulWidget {
   final int crossAxisCount;
-  final IDiceBloc bloc;
+  final DiceBloc bloc;
 
   DicePage({
-    this.path = Constants.defaultPath,
-    this.ext = Constants.defaultExt,
     this.crossAxisCount = Constants.defaultCrossAxisCount,
     this.bloc,
   });
+
+  @override
+  _DicePageState createState() => _DicePageState();
+}
+
+class _DicePageState extends State<DicePage> {
+  String score;
+
+  @override
+  void initState() {
+    super.initState();
+    score = Constants.defaultScore;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +37,12 @@ class DicePage extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        initialData: bloc.defaultDices(),
-        stream: bloc.stream,
+        initialData: widget.bloc.defaultDices(),
+        stream: widget.bloc.stream,
         builder: (context, snapshot) {
           return GridView.count(
             childAspectRatio: Constants.aspectRatio,
-            crossAxisCount: crossAxisCount,
+            crossAxisCount: widget.crossAxisCount,
             crossAxisSpacing: Constants.gridViewPaddingTop,
             children: buildList(
               snapshot,
@@ -74,12 +83,17 @@ class DicePage extends StatelessWidget {
                 bottom: Constants.containerPadding,
               ),
               child: Container(
-                child: Text(
-                  "Score: 21",
-                  style: TextStyle(
-                    fontSize: Constants.scoreTextFontSize,
-                  ),
-                ),
+                child: StreamBuilder<Object>(
+                    initialData: Constants.defaultScore,
+                    stream: widget.bloc.scoreStream,
+                    builder: (context, snapshot) {
+                      return Text(
+                        Constants.scoreText + snapshot.data,
+                        style: TextStyle(
+                          fontSize: Constants.scoreTextFontSize,
+                        ),
+                      );
+                    }),
               ),
             )
           ],
@@ -89,13 +103,12 @@ class DicePage extends StatelessWidget {
   }
 
   List<Widget> buildList(AsyncSnapshot snapshot) {
-    return snapshot.data.map<Widget>((value) {
+    var diceImages = snapshot.data.map<Widget>((value) {
       return Dice(
-        bloc,
-        path,
-        ext,
-        value,
+        widget.bloc.rollDices,
+        value.toString(),
       );
-    }).toList();
+    });
+    return diceImages.toList();
   }
 }

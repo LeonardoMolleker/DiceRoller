@@ -12,7 +12,9 @@ abstract class Constants {
   static const String dicePageTitle = "Dice roller app";
   static const int defaultCrossAxisCount = 2;
   static const int defaultDiceNumbers = 6;
-  static const String defaultPath = "lib/assets/face";
-  static const String defaultExt = ".png";
+  static const String defaultImagePath = "lib/assets/face";
+  static const String defaultImageExtension = ".png";
   static const int defaultDiceValue = 1;
+  static const String scoreText = "Score: ";
+  static const String defaultScore = "6";
 }

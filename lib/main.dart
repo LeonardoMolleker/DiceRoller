@@ -1,4 +1,3 @@
-import 'bloc/i_dice_bloc.dart';
 import 'bloc/dice_bloc.dart';
 import 'src/pages/dice_page.dart';
 
@@ -9,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final IDiceBloc bloc = DiceBloc(
+  final DiceBloc bloc = DiceBloc(
     numberOfDices: 6,
   );
 

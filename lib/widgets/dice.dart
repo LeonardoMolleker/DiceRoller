@@ -1,25 +1,20 @@
-import '../bloc/i_dice_bloc.dart';
 import '../const/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Dice extends StatelessWidget {
-  final IDiceBloc diceBloc;
-  final String path;
-  final String ext;
-  final int value;
+  final Function rollDices;
+  final String value;
 
   Dice(
-    this.diceBloc,
-    this.path,
-    this.ext,
+    this.rollDices,
     this.value,
   );
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: diceBloc.rollDices,
+      onTap: rollDices,
       child: Padding(
         padding: const EdgeInsets.only(
           left: Constants.containerPadding,
@@ -27,7 +22,9 @@ class Dice extends StatelessWidget {
         ),
         child: Container(
           child: Image.asset(
-            path + value.toString() + ext,
+            Constants.defaultImagePath +
+                value +
+                Constants.defaultImageExtension,
           ),
         ),
       ),
