@@ -1,4 +1,6 @@
+import 'bloc/dice_bloc.dart';
 import 'src/pages/dice_page.dart';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,7 +8,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final DiceBloc bloc = DiceBloc(
+    numberOfDices: 6,
+  );
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: DicePage(
-        diceQuantity: 6,
+        bloc: bloc,
       ),
     );
   }

@@ -1,47 +1,54 @@
+import '../../bloc/dice_bloc.dart';
+import '../../widgets/dice.dart';
 import '../../const/constants.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-class DicePage extends StatelessWidget {
-  String ext;
-  String path;
-  int diceQuantity;
-  int crossAxisCount;
+class DicePage extends StatefulWidget {
+  final int crossAxisCount;
+  final DiceBloc bloc;
 
   DicePage({
-    this.diceQuantity,
-    this.path = "lib/assets/face",
-    this.ext = ".png",
-    this.crossAxisCount = 2,
+    this.crossAxisCount = Constants.defaultCrossAxisCount,
+    this.bloc,
   });
+
+  @override
+  _DicePageState createState() => _DicePageState();
+}
+
+class _DicePageState extends State<DicePage> {
+  String score;
+
+  @override
+  void initState() {
+    super.initState();
+    score = Constants.defaultScore;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Dice page",
+          Constants.dicePageTitle,
         ),
       ),
-      body: GridView.count(
-        padding: EdgeInsets.only(
-          top: Constants.gridViewPaddingTop,
-        ),
-        childAspectRatio: Constants.aspectRatio,
-        crossAxisCount: this.crossAxisCount,
-        crossAxisSpacing: Constants.gridViewPaddingTop,
-        children: List.generate(this.diceQuantity, (index) {
-          return Container(
-            padding: EdgeInsets.only(
-              left: Constants.containerPadding,
-              right: Constants.containerPadding,
-            ),
-            child: Image.asset(
-              this.path + (++index).toString() + this.ext,
+      body: StreamBuilder(
+        initialData: widget.bloc.defaultDices(),
+        stream: widget.bloc.stream,
+        builder: (context, snapshot) {
+          return GridView.count(
+            childAspectRatio: Constants.aspectRatio,
+            crossAxisCount: widget.crossAxisCount,
+            crossAxisSpacing: Constants.gridViewPaddingTop,
+            children: buildList(
+              snapshot,
             ),
           );
-        }),
+        },
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -55,34 +62,53 @@ class DicePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: Constants.containerHeight,
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 right: Constants.containerPaddingRight,
                 top: Constants.containerPadding,
               ),
-              child: Text(
-                "Press any dice to roll them!",
-                style: TextStyle(
-                  fontSize: Constants.indicatorTextFontSize,
+              child: Container(
+                height: Constants.containerHeight,
+                child: Text(
+                  Constants.rollThemText,
+                  style: TextStyle(
+                    fontSize: Constants.indicatorTextFontSize,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(
+            Padding(
+              padding: const EdgeInsets.only(
                 bottom: Constants.containerPadding,
               ),
-              child: Text(
-                "Score: 21",
-                style: TextStyle(
-                  fontSize: Constants.scoreTextFontSize,
-                ),
+              child: Container(
+                child: StreamBuilder<Object>(
+                    initialData: Constants.defaultScore,
+                    stream: widget.bloc.scoreStream,
+                    builder: (context, snapshot) {
+                      return Text(
+                        Constants.scoreText + snapshot.data,
+                        style: TextStyle(
+                          fontSize: Constants.scoreTextFontSize,
+                        ),
+                      );
+                    }),
               ),
             )
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> buildList(AsyncSnapshot snapshot) {
+    var diceImages = snapshot.data.map<Widget>((value) {
+      return Dice(
+        widget.bloc.rollDices,
+        value.toString(),
+      );
+    });
+    return diceImages.toList();
   }
 }
